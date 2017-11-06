@@ -47,15 +47,22 @@ function powerline-fonts() {
 
 function poweline-shell() {
     ipwd=$PWD
-    git clone https://github.com/banga/powerline-shell.git
-    mv poweline-shell $HOME/.powerline-shell
-    cd $HOME/.powerline-shell
-    python setup.py install
-    
-    printf '#! powerline-shell\nfunction _update_ps1() {\n\tPS1="$(~/.powerline-shell/powerline-shell.py $? 2> /dev/null)"\n}\nexport PROMPT_COMMAND="_update_ps1"\n\n' >> ~/.bashrc    
+    if [ ! -d $DIR ];
+    then 
+	git clone https://github.com/iKrishneel/powerline-shell.git ~/.powerline-shell
+    else
+	cd ~/.powerline-shell
+	git fetch --all
+	git pull --all
+    fi
+    cd ~/.powerline-shell
+    python install.py build
+    sudo python install.py install
+
+    printf '\n\n#! powerline-shell\nfunction _update_ps1() {\n\tPS1="$(~/.powerline-shell/powerline-shell.py $? 2> /dev/null)"\n}\nexport PROMPT_COMMAND="_update_ps1"\n\n' >> ~/.bashrc    
 }
 
 
-poweline-install
-powerline-fonts
+# poweline-install
+# powerline-fonts
 poweline-shell
