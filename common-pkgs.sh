@@ -18,3 +18,10 @@ sudo apt-get  install texlive-full
 
 ##
 sudo apt-get install libboost-all-dev
+
+#! protobuf
+sudo apt-get install python-pip -y
+sudo pip install protobuf
+
+#! tbb-lib
+sudo apt-get install libtbb-dev -y
