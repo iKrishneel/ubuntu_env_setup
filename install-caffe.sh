@@ -91,10 +91,10 @@ function install-caffe {
     cmake -DCUDA_USE_STATIC_CUDA_RUNTIME=OFF ..
 
     /bin/echo -e "\e[1;32mCompiling Caffe\e[0m"
-    make -j4 all
+    make -j8 all
     
     /bin/echo -e "\e[1;32mRunning Caffe Tests\e[0m"
-    make -j4 runtest
+    make -j8 runtest
     
     /bin/echo -e "\e[1;35m Caffe Installation completed... \e[0m"
 }
@@ -117,6 +117,9 @@ function main {
     install-gflags
     install-caffe-deps
     install-caffe
+
+    printf '\n\n# Caffe Root\nexport CAFFE_ROOT=$HOME/caffe\n' >> ~/.bashrc
+    printf 'export PYTHONPATH=$HOME/caffe/python:$PYTHONPATH\n' >> ~/.bashrc  
 }
 
 main
