@@ -7,7 +7,7 @@ function sklearn() {
 	 python-numpy python-scipy \
 	 libatlas-dev -y
     sudo apt-get install python-matplotlib -y
-    pip install -U scipy scikit-learn
+    sudo pip install -U scipy scikit-learn
 }
 
 sklearn

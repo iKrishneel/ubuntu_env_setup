@@ -42,6 +42,8 @@ function powerline-fonts() {
     wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
     mv PowerlineSymbols.otf $HOME/.local/share/fonts/
     sudo fc-cache -vf $HOME/.local/share/fonts/
+
+    mkdir -p $HOME/.config/fontconfig/conf.d/
     mv 10-powerline-symbols.conf $HOME/.config/fontconfig/conf.d/
 }
 
@@ -63,6 +65,6 @@ function poweline-shell() {
 }
 
 
-# poweline-install
-# powerline-fonts
+poweline-install
+powerline-fonts
 poweline-shell
