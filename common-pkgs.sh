@@ -33,3 +33,6 @@ sudo apt-get install libeigen3-dev libflann-dev -y
 
 ##! others
 sudo apt-get install -y htop
+
+##! network tools
+sudo apt install net-tools

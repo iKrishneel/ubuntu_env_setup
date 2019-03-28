@@ -4,15 +4,17 @@ function install-ros() {
     sudo -v
     sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 
-    sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 0xB01FA116
+    version=melodic
+    
+    sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
 
     sudo apt-get update
-    sudo apt-get install ros-kinetic-desktop-full -y
+    sudo apt-get install ros-$version-desktop-full -y
 
     sudo rosdep init
     rosdep update
 
-    source /opt/ros/kinetic/setup.bash
+    source /opt/ros/melodic/setup.bash
 
     sudo apt-get install python-rosinstall
     sudo apt-get install python-catkin-tools
@@ -20,7 +22,7 @@ function install-ros() {
 
 
 function rosws() {
-    DIR=~/ros/kinetic/src
+    DIR=~/ros/melodic/src
     mkdir -p $DIR
 
     cd $DIR
@@ -28,14 +30,14 @@ function rosws() {
     git clone https://github.com/ros-perception/image_common.git
     git clone https://github.com/ros-perception/image_pipeline.git
 
-    source /opt/ros/kinetic/setup.bash
+    source /opt/ros/melodic/setup.bash
     cd ..
     catkin_init_workspace
 
     catkin build
     
-    printf '\nsource ~/ros/kinetic/devel/setup.bash' >> ~/.bashrc
+    printf '\nsource ~/ros/melodic/devel/setup.bash' >> ~/.bashrc
 }
 
-# install-ros
+install-ros
 rosws
