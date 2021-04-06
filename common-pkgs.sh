@@ -8,31 +8,33 @@ sudo apt-get upgrade
 ## change caps to cntrl
 setxkbmap -option caps:ctrl_modifier
 
-sudo apt-get install git ssh emacs24 -y
+sudo apt-get install -y \
+     git \
+     ssh \
+     emacs \
+     htop \
+     net-tools \
+     python3 \
+     python3-pip \
+     apt-transport-https \
+     ca-certificates \
+     curl \
+     wget \
+     gnupg \
+     tmux \
+     lsb-release
 
-sudo apt-get install python-pip -y
-sudo pip install --upgrade pip
-sudo pip install numpy==1.11
-sudo pip install ipython
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-## latex
-sudo apt-get  install texlive-full -y
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-##
-sudo apt-get install libboost-all-dev -y
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-#! protobuf
-sudo apt-get install python-pip -y
-sudo pip install protobuf
+sudo groupadd docker
+sudo usermod -aG docker ${USER}
 
-#! tbb-lib
-sudo apt-get install libtbb-dev -y
-
-sudo apt-get install libeigen3-dev libflann-dev -y
-
-
-##! others
-sudo apt-get install -y htop
-
-##! network tools
-sudo apt install net-tools
+sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
+sudo chmod g+rwx "$HOME/.docker" -R
