@@ -9,3 +9,4 @@ sudo apt install gh
 # git configuration
 # force use ssh
 git config --global url."git@github.com:".insteadOf "https://github.com/" 
+# git config --global commit.gpgSign true
