@@ -1,10 +1,33 @@
 (require 'package)
 ; add MELPA to repository list
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
 ; initialize package.el
 (package-initialize)
 
+(setq package-list '(auto-complete
+		     yasnippet
+		     auto-complete
+		     hlinum
+		     jedi
+		     auto-complete
+		     nyan-mode
+		     iedit autopair
+		     auto-complete-clang
+		     auto-complete-clang-async
+		     google-c-style
+		     cmake-mode
+		     grandshell-theme
+		     ac-math))
+
+; fetch the list of packages available
+(unless package-archive-contents
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
 
 ; start auto-complete with emacs
 (require 'auto-complete)
@@ -13,14 +36,10 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
-
 ;; ;; ;; start yasnippet with emacs
 (require 'yasnippet)
 (yas-global-mode 1)
 
-;; ;; nyan-mode
-;; ;; (add-to-list 'load-path "~/.emacs.d/nyan-mode")
-;; ;; (require 'nyan-mode)
  (nyan-mode 1)
 ;;(setq-default nyan-wavy-trail nil)
 (setq nyan-wavy-trail t)
@@ -36,7 +55,14 @@
 (require 'iedit)
 (define-key global-map (kbd "C-c ;") 'iedit-mode)
 
-					; turn on Semantic
+(require 'flymake)
+(require 'use-package)
+(use-package flymake-cursor
+  :load-path "~/.emacs.d/emacs-flymake-cursor"
+  :config
+  (flymake-cursor-mode))
+
+;; turn on Semantic
 (semantic-mode 1)
 (defun my:add-semantic-to-autocomplete()
   (add-to-list 'ac-sources 'ac-source-semantic)
@@ -44,7 +70,7 @@
 (add-hook 'c-mode-common-hook 'my:add-semantic-to-autocomplete)
 
 ;;enable global support for Semanticdb
-					; turn on Semantic
+;; turn on Semantic
 (semantic-mode 1)
 (defun my:add-semantic-to-autocomplete()
   (add-to-list 'ac-sources 'ac-source-semantic)
@@ -54,7 +80,6 @@
 ;;enable global support for Semanticdb
 (global-semanticdb-minor-mode 1)
 (global-semanticdb-minor-mode 1)
-
 
 ;; turn on auto-indent
 (setq c-default-style "ellemtel" c-basic-offset 5)
@@ -62,44 +87,30 @@
 (global-ede-mode 1)
 (global-semantic-idle-scheduler-mode 1)
 
-
 ;; turn on autopairing of backets
 (require 'autopair)
 (autopair-global-mode) ;; to enable in all buffers
-
-
-;; turn on highlight paren mode
-(show-paren-mode 1)
-
 
 ;; turn on number line
 (global-linum-mode t)
 (setq linum-format "%d  ")
 
-
 ;; Show the cursor line
 (require 'hlinum)
-;; (hlinum-activate)
 
-
+(require 'cmake-mode)
 (require 'auto-complete-clang)
 (require 'auto-complete-clang-async)
 (global-semanticdb-minor-mode 1)
-;; 					;(global-semantic-highlight-func-mode 1)
-;; (global-semanticdb-minor-mode 1)
-
 
 ;; turn on auto-indent
 (setq c-default-style "ellemtel"
       c-basic-offset 5)
 
-
-					; turn on ede mode
+;; turn on ede mode
 (global-ede-mode 1)
 (global-semantic-idle-scheduler-mode 1)
 
-
-;; turn on copyright
 ;; turn on autopairing of backets
 (require 'autopair)
 (autopair-global-mode) ;; to enable in all buffers
@@ -107,51 +118,36 @@
 ;; turn on highlight paren mode
 (show-paren-mode 1)
 
-
-;; turn on number line
-(global-linum-mode t)
-(setq linum-format "%d  ")
-
-
-;; Show the cursor line
-(require 'hlinum)
-;; (hlinum-activate)
-
-
-(require 'auto-complete-clang)
-(require 'auto-complete-clang-async)
-
 ;; key for opening header file
 (global-set-key (kbd "C-x C-o") 'ff-find-other-file)
 
-
-;; Set Up color
-					;Language support
 (setq auto-mode-alist
       (append
        '(("\\.F$"    . fortran-mode)
 	 ("\\.inc$"  . fortran-mode)
 	 ("\\.C$"    . c++-mode)
 	 ("\\.cc$"   . c++-mode)
+	 ("\\.cu$"   . c++-mode)
 	 ("\\.h$"    . c++-mode)
+	 ("\\.hpp$"    . c++-mode)
 	 ("\\.cxx$"  . c++-mode)
 	 ("\\.html$" . html-mode)
-	 )
+	 ("CMakeLists\\.txt\\'" . cmake-mode)
+	 ("\\.cmake\\'" . cmake-mode)
+	 ("\\.launch$" . xml-mode)
+	 ("\\.hpp\\'" . c++-mode)
+	 ("\\.cu\\'" . c++-mode)
+	 ("\\.m$" . octave-mode))
        auto-mode-alist))
 
-					; Set up C++ variables
-					;
-(setq c-recognize-knr-p nil)
-(add-hook 'c++-mode-hook (function (lambda () (c-set-style "Ellemtel"))))
-(add-hook 'c++-mode-hook 'font-lock-mode )
+(put 'upcase-region 'disabled nil)
 
 ;;Auto indent
 (set (make-local-variable 'aai-indent-function)
      'aai-indent-defun)
 
-;; start flymake-google-cpplint-load
-;; (require 'flymake-google-cpplint)
-;; (add-hook 'c++-mode-hook 'flymake-google-cpplint-load)
+(package-install 'flycheck)
+(global-flycheck-mode)
 
 (defun my:flymake-google-init ()
   (require 'flymake-google-cpplint)
@@ -162,13 +158,12 @@
 (add-hook 'c-mode-hook 'my:flymake-google-init)
 (add-hook 'c++-mode-hook 'my:flymake-google-init)
 
-
-
 ;; start google-c-style with emacs
 (require 'google-c-style)
+(autoload 'google-set-c-style "google-c-style")
+(autoload 'google-make-newline-indent "google-c-style")
 (add-hook 'c-mode-common-hook 'google-set-c-style)
-(add-hook 'c-mode-common-hook 'google-make-newline-indent)
-
+(add-hook 'c++-mode-common-hook 'google-set-c-style)
 
 (setq gc-cons-threshold 1000000)
 
@@ -179,8 +174,6 @@
 (semantic-add-system-include "/usr/include/" 'c-mode)
 (semantic-add-system-include "/usr/include/" 'c++-mode)
 
-;; C++ Mode
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (require 'cl)
 
 (defun file-in-directory-list-p (file dirlist)
@@ -202,75 +195,32 @@ the directories in the INCLUDE environment variable."
 
 (add-to-list 'magic-fallback-mode-alist '(buffer-standard-include-p . c++-mode))
 
-					; style I want to use in c++ mode
 (c-add-style "my-style"
 	     '("stroustrup"
-	       (indent-tabs-mode . nil)        ; use spaces rather than tabs
-	       (c-basic-offset . 4)            ; indent by four spaces
-	       (c-offsets-alist . ((inline-open . 0)  ; custom indentation rules
+	       (indent-tabs-mode . nil)
+	       (c-basic-offset . 4)
+	       (c-offsets-alist . ((inline-open . 0)
 				   (brace-list-open . 0)
 				   (statement-case-open . +)))))
 
 (defun my-c++-mode-hook ()
-  (c-set-style "my-style")        ; use my-style defined above
+  (c-set-style "my-style")
   (auto-fill-mode)
   (c-toggle-auto-hungry-state 1))
-
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 
-;; (define-key c++-mode-map "\C-ct" 'some-function-i-want-to-call)
-
-
-
-					; roslaunch highlighting
-(add-to-list 'auto-mode-alist '("\\.launch$" . xml-mode))
-
-
-					;(require 'yaml-mode)
-					;    (add-to-list 'auto-mode-alist '("\\yaml$" . yaml-mode))
-
-					;(add-hook 'yaml-mode-hook
-					;      '(lambda ()
-					;        (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-					; Add cmake listfile names to the mode list.
-(setq auto-mode-alist
-      (append
-       '(("CMakeLists\\.txt\\'" . cmake-mode))
-       '(("\\.cmake\\'" . cmake-mode))
-       auto-mode-alist))
-
 (autoload 'cmake-mode "/usr/share/emacs/site-lisp/cmake-mode.el" t)
-
-
 
 ;; color the entire line
 (global-hl-line-mode 1)
 ;; To customize the background color
 (set-face-background 'hl-line "magenta")
 ;; -- color of line
-(set-face-background 'hl-line "magenta")
-
+(set-face-background 'hl-line "#cd1076")
 
 ;; python auto-complete
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(flymake-google-cpplint-command "/usr/local/bin/cpplint")
- '(package-selected-packages
-   (quote
-    (flymake-elixir color-theme-solarized cuda-mode pylint elpy ac-math ecb ## color-theme solarized-theme latex-preview-pane yatemplate yaml-mode jedi iedit hlinum google-c-style git flymake-google-cpplint flymake-cursor flymake-cppcheck el-autoyas autopair auto-yasnippet auto-complete-nxml auto-complete-exuberant-ctags auto-complete-clang-async auto-complete-clang auto-complete-chunk auto-complete-c-headers auto-auto-indent ac-c-headers))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-;;; Indentation for python
 
 ;; Ignoring electric indentation
 (defun electric-indent-ignore-python (char)
@@ -286,8 +236,7 @@ the directories in the INCLUDE environment variable."
   (local-set-key (kbd "RET") 'newline-and-indent))
 (add-hook 'python-mode-hook 'set-newline-and-indent)
 
-
-					; Turn on auto-insert
+;; Turn on auto-insert
 (eval-after-load 'autoinsert
   '(define-auto-insert '("\\.c\\'" . "C skeleton")
      '(
@@ -308,8 +257,6 @@ the directories in the INCLUDE environment variable."
        > _ \n
        "}" > \n)))
 
-
-
 ;; turn on lisp autocomplete
 (setq tab-always-indent 'complete)
 (add-to-list 'completion-styles 'initials t)
@@ -325,21 +272,9 @@ the directories in the INCLUDE environment variable."
     (when matching-text (message matching-text))))
 
 
-;; latex
-					;(require 'auctex-latexmk)
-					;(auctex-latexmk-setup)
-
-;; (latex-preview-pane-enable)
-
-
 (if window-system (require 'font-latex))
 (setq font-lock-maximum-decoration t)
 
-
-;; color theme
-;; (require 'color-theme)
-;; (color-theme-initialize)
-;;(color-theme-shaman)
 
 ;; Change color of C/C++ comment
 (set-face-foreground 'font-lock-string-face "green")
@@ -353,33 +288,6 @@ the directories in the INCLUDE environment variable."
 	(append '(ac-source-math-unicode ac-source-math-latex ac-source-latex-commands)
 		ac-sources)))
 (add-hook 'TeX-mode-hook 'ac-latex-mode-setup)
-
-
-;; ace popup
-;; (ace-popup-menu-mode 1)
-
-					;for cuda files
-(add-to-list 'auto-mode-alist '("\\.cu\\'" . c++-mode))
-
-;; (defun remove-dos-eol ()
-;;   "Do not show ^M in files containing mixed UNIX and DOS line endings."
-;;   (interactive)
-;;   (setq buffer-display-table (make-display-table))
-;;   (aset buffer-display-table ?\^M []))
-
-(setq auto-mode-alist
-      (cons
-       '("\\.m$" . octave-mode)
-       auto-mode-alist))
-(put 'upcase-region 'disabled nil)
-
-
-;; latex setup
-(require 'flymake)
-;; (defun flymake-get-tex-args (file-name)
-;;   (list "pdflatex"
-;; 	(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
-;; (add-hook 'LaTeX-mode-hook 'flymake-mode)
 
 (require 'ispell)
 (setq ispell-program-name "aspell") ; could be ispell as well, depending on your preferences
@@ -402,6 +310,6 @@ the directories in the INCLUDE environment variable."
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
 
-;; (load-file "~/.emacs.d/caffe-mode.el")
-(add-to-list 'auto-mode-alist '("\\.prototxt\\'" . caffe-mode))
-(put 'scroll-left 'disabled nil)
+(add-hook 'yaml-mode-hook
+        (lambda ()
+	  (define-key yaml-mode-map "\C-m" 'newline-and-indent)))

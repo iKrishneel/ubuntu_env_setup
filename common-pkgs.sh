@@ -22,6 +22,7 @@ sudo apt-get install -y \
      wget \
      gnupg \
      tmux \
+     byobu \
      lsb-release
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -36,5 +37,7 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo groupadd docker
 sudo usermod -aG docker ${USER}
 
-sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
-sudo chmod g+rwx "$HOME/.docker" -R
+sudo chmod +x /var/run/docker.sock
+
+sudo snap install slack --classic
+sudo snap install teams
