@@ -41,3 +41,6 @@ sudo chmod +x /var/run/docker.sock
 
 sudo snap install slack --classic
 sudo snap install teams
+
+# cpp linter
+sudo pip3 install cpplint
