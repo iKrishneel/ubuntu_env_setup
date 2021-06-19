@@ -12,7 +12,8 @@
 		     jedi
 		     auto-complete
 		     nyan-mode
-		     iedit autopair
+		     iedit
+		     autopair
 		     auto-complete-clang
 		     auto-complete-clang-async
 		     google-c-style
@@ -110,10 +111,6 @@
 ;; turn on ede mode
 (global-ede-mode 1)
 (global-semantic-idle-scheduler-mode 1)
-
-;; turn on autopairing of backets
-(require 'autopair)
-(autopair-global-mode) ;; to enable in all buffers
 
 ;; turn on highlight paren mode
 (show-paren-mode 1)
