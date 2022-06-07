@@ -13,3 +13,4 @@ then
 fi
 
 gsettings set org.gnome.desktop.background picture-uri file://${_FILENAME}
+gsettings set org.gnome.desktop.background picture-uri-dark file://${_FILENAME}
