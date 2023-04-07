@@ -16,6 +16,7 @@ sudo apt-get install -y \
      net-tools \
      python3 \
      python3-pip \
+     python3-virtualenv \
      apt-transport-https \
      ca-certificates \
      curl \
