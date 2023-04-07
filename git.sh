@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-sudo apt-get install git
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-sudo apt-add-repository https://cli.github.com/packages
-sudo apt update
-sudo apt install gh
+sudo npm i -g gh gitmoji-cli diff-so-fancy
 
 # git configuration
 # force use ssh
