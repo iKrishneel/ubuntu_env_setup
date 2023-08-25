@@ -1,4 +1,4 @@
-#!/usr/bin/evn bash
+#!/usr/bin/env bash
 
 sudo apt-get install -y gnome-tweaks tree gettext
 

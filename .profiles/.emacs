@@ -13,7 +13,6 @@
 		     auto-complete
 		     nyan-mode
 		     iedit
-		     autopair
 		     auto-complete-clang
 		     auto-complete-clang-async
 		     google-c-style
@@ -88,16 +87,14 @@
 (global-ede-mode 1)
 (global-semantic-idle-scheduler-mode 1)
 
-;; turn on autopairing of backets
-(require 'autopair)
-(autopair-global-mode) ;; to enable in all buffers
-
 ;; turn on number line
 (global-linum-mode t)
 (setq linum-format "%d  ")
+(set-face-foreground 'linum "#000000")
 
 ;; Show the cursor line
 (require 'hlinum)
+;; (set-face-foreground 'linum "#707B7C")
 
 (require 'cmake-mode)
 (require 'auto-complete-clang)
@@ -192,19 +189,19 @@ the directories in the INCLUDE environment variable."
 
 (add-to-list 'magic-fallback-mode-alist '(buffer-standard-include-p . c++-mode))
 
-(c-add-style "my-style"
-	     '("stroustrup"
-	       (indent-tabs-mode . nil)
-	       (c-basic-offset . 4)
-	       (c-offsets-alist . ((inline-open . 0)
-				   (brace-list-open . 0)
-				   (statement-case-open . +)))))
+;; (c-add-style "my-style"
+;; 	     '("stroustrup"
+;; 	       (indent-tabs-mode . nil)
+;; 	       (c-basic-offset . 4)
+;; 	       (c-offsets-alist . ((inline-open . 0)
+;; 				   (brace-list-open . 0)
+;; 				   (statement-case-open . +)))))
 
-(defun my-c++-mode-hook ()
-  (c-set-style "my-style")
-  (auto-fill-mode)
-  (c-toggle-auto-hungry-state 1))
-(add-hook 'c++-mode-hook 'my-c++-mode-hook)
+;; (defun my-c++-mode-hook ()
+;;   (c-set-style "my-style")
+;;   (auto-fill-mode)
+;;   (c-toggle-auto-hungry-state 1))
+;; (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 
 (autoload 'cmake-mode "/usr/share/emacs/site-lisp/cmake-mode.el" t)
 
@@ -272,10 +269,13 @@ the directories in the INCLUDE environment variable."
 (if window-system (require 'font-latex))
 (setq font-lock-maximum-decoration t)
 
-
 ;; Change color of C/C++ comment
 (set-face-foreground 'font-lock-string-face "green")
 (set-face-foreground 'font-lock-comment-face "red")
+
+;; split
+(setq split-height-threshold nil) 
+(setq split-width-threshold 0)
 
 ;; latex ac-maths
 (require 'ac-math)
@@ -310,3 +310,18 @@ the directories in the INCLUDE environment variable."
 (add-hook 'yaml-mode-hook
         (lambda ()
 	  (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(json-mode docker-compose-mode ini-mode toml-mode markdown-preview-mode markdown-mode yaml-mode dockerfile-mode yasnippet use-package nyan-mode jedi iedit hlinum google-c-style flymake-cursor flycheck cmake-mode auto-complete-clang-async auto-complete-clang ac-math)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(put 'downcase-region 'disabled nil)
+(put 'scroll-left 'disabled nil)
